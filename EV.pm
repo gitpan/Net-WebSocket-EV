@@ -4,7 +4,7 @@ use EV;
 use Carp;
 use IO::Socket::INET;
 
-our $VERSION = 0.1;
+our $VERSION = 0.11;
 
 require DynaLoader;
 
@@ -148,7 +148,7 @@ Net::WebSocket::EV doesn't do handshake, you must do it before calling new().
 
 =item buffering
 
-If set to 0 - disables buffering. on_msg_recv is alwais called with empty $msg, use on_frame_recv_* to handle messages. Useful for handling big binary data without buffering it in memory.
+If set to 0 - disables buffering. on_msg_recv is always called with empty $msg, use on_frame_recv_* to handle messages. Useful for handling big binary data without buffering it in memory.
 
 Default if not defined : 1
 
@@ -174,29 +174,21 @@ Used only by Net::WebSocket::EV::Client. Must return $len bytes scalar to mask m
 
 Callback arguments: my ($len) = @_;
 
-=item on_close
+=item on_frame_recv_start
 
-Called when connection is closed.
+Called when frame header is received.
 
-Callback arguments: my ($close_code) = @_;
+Callback arguments: my ($fin, $rsv,$opcode,$payload_length) = @_;
 
-=item on_close
+=item on_frame_recv_chunk
 
-Called when connection is closed.
+Called when next data portion is received.
 
-Callback arguments: my ($close_code) = @_;
+Callback arguments: my ($data) = @_;
 
-=item on_close
+=item on_frame_recv_end
 
-Called when connection is closed.
-
-Callback arguments: my ($close_code) = @_;
-
-=item on_close
-
-Called when connection is closed.
-
-Callback arguments: my ($close_code) = @_;
+Called when message is received. No arguments
 
 =back
 
